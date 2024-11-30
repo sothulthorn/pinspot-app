@@ -7,7 +7,7 @@ import AddPlace from './screens/AddPlace';
 import IconButton from './components/UI/IconButton';
 import { Colors } from './constant/colors';
 import Map from './screens/Map';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { init } from './util/database';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -17,17 +17,25 @@ export default function App() {
   const [dbInitialized, setDbInitialized] = useState(false);
 
   useEffect(() => {
-    init()
-      .then(() => {
+    const prepareApp = async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+
+        await init();
+
         setDbInitialized(true);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      } catch (err) {
+        console.error('Error during database initialization:', err);
+      } finally {
+        await SplashScreen.hideAsync();
+      }
+    };
+
+    prepareApp();
   }, []);
 
   if (!dbInitialized) {
-    SplashScreen.hideAsync();
+    return null;
   }
 
   return (
