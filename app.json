@@ -30,7 +30,8 @@
         {
           "cameraPermission": "Allow PinSpot to access your camera"
         }
-      ]
+      ],
+      "expo-sqlite"
     ]
   }
 }

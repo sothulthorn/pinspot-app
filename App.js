@@ -7,10 +7,29 @@ import AddPlace from './screens/AddPlace';
 import IconButton from './components/UI/IconButton';
 import { Colors } from './constant/colors';
 import Map from './screens/Map';
+import { useCallback, useEffect, useState } from 'react';
+import { init } from './util/database';
+import * as SplashScreen from 'expo-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [dbInitialized, setDbInitialized] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => {
+        setDbInitialized(true);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  if (!dbInitialized) {
+    SplashScreen.hideAsync();
+  }
+
   return (
     <>
       <StatusBar style="dark" />
