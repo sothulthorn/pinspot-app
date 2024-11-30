@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Colors } from '../../constant/colors';
 import OutlinedButton from '../UI/OutlinedButton';
 
-const ImagePicker = () => {
+const ImagePicker = ({ onTakeImage }) => {
   const [pickedImage, setPickedImage] = useState();
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
@@ -47,6 +47,7 @@ const ImagePicker = () => {
     const imageUri = image.assets[0].uri;
 
     setPickedImage(imageUri);
+    onTakeImage(imageUri);
   };
 
   let imagePreview = <Text>No image taken yet.</Text>;
