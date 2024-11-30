@@ -69,3 +69,33 @@ export async function fetchPlaces() {
     throw error;
   }
 }
+
+export async function fetchPlaceDetails(id) {
+  try {
+    const db = await SQLite.openDatabaseAsync('places.db');
+
+    const result = await db.getFirstAsync('SELECT * FROM places WHERE id = ?', [
+      id,
+    ]);
+
+    if (result) {
+      const place = {
+        id: result.id,
+        title: result.title,
+        imageUri: result.imageUri,
+        address: result.address,
+        location: {
+          lat: result.lat,
+          lng: result.lng,
+        },
+      };
+      return place;
+    } else {
+      console.log('Place not found.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching place details:', error);
+    throw error;
+  }
+}
